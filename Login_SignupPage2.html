@@ -70,7 +70,7 @@
             color: red;
             font-size: 0.9em;
         }
-        .password-error {
+        .password-error, .password-match-error {
             color: red;
             font-size: 0.9em;
         }
@@ -82,18 +82,19 @@
             <legend>Login Form</legend>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required onkeyup="validateFields()" placeholder="please enter your username" autofocus =""/>
+                <input type="text" id="username" name="username" required onkeyup="validateFields()" placeholder="please enter your username" autofocus=""/>
                 <div class="main"></div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required onkeyup="validateFields()" placeholder="please enter your password" autofocus="" />
+                <input type="password" id="password" name="password" required onkeyup="validateFields()" placeholder="please enter your password" autofocus=""/>
                 <div id="passwordError" class="password-error"></div>
                 <div class="main"></div>
             </div>
             <div class="form-group">
                 <label for="con_password">Confirm Password</label>
-                <input type="password" id="con_password" name="con_password" onkeyup="checkPasswordMatch()" required autofocus="" />
+                <input type="password" id="con_password" name="con_password" onkeyup="checkPasswordMatch()" required autofocus=""/>
+                <div class="password-match-error"></div> <!-- Added error message container -->
                 <div class="main"></div>
             </div>
             <div class="form-group">
@@ -130,9 +131,13 @@
         function checkPasswordMatch() {
             const password = document.getElementById('password').value;
             const conPassword = document.getElementById('con_password').value;
+            const passwordMatchError = document.querySelector('.password-match-error');
+
             if (conPassword.length > 0) {
                 if (password !== conPassword) {
-                    alert("Confirm Password doesn't match");
+                    passwordMatchError.innerText = "Confirm Password doesn't match";
+                } else {
+                    passwordMatchError.innerText = ""; // Clear the error message when passwords match
                 }
             }
         }
