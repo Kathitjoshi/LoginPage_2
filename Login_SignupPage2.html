@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Verdana, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        fieldset {
+            border: none;
+        }
+        legend {
+            font-size: 1.5em;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"], input[type="password"], input[type="email"]{
+            width: 250px;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .show-password {
+            width: 200px;
+            margin-left: 10px;
+        }
+        .main {
+            color: black;
+        }
+        .caps-warning {
+            color: red;
+            font-size: 0.9em;
+        }
+        .whitespace {
+            color: red;
+            font-size: 0.9em;
+        }
+        .password-error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <form id="loginForm">
+        <fieldset>
+            <legend>Login Form</legend>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required onkeyup="validateFields()" placeholder="please enter your username" autofocus =""/>
+                <div class="main"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required onkeyup="validateFields()" placeholder="please enter your password" autofocus="" />
+                <div id="passwordError" class="password-error"></div>
+                <div class="main"></div>
+            </div>
+            <div class="form-group">
+                <label for="con_password">Confirm Password</label>
+                <input type="password" id="con_password" name="con_password" onkeyup="checkPasswordMatch()" required autofocus="" />
+                <div class="main"></div>
+            </div>
+            <div class="form-group">
+                <label for ="email">Email</label>
+                <input type="email" name="" id="email" required autofocus="" placeholder="please enter your email"/>
+                <div class="main"></div>
+             </div> 
+            <div class="form-group">
+                <button type="submit">Login</button>
+                <button type="button" onclick="togglePasswordVisibility()" class="main show-password">Show Password</button>
+            </div>
+              
+            <div id="capsWarning" class="caps-warning"></div>
+            <div id="whitespace" class="whitespace"></div>
+        </fieldset>
+    </form>
+
+    <script>
+        function togglePasswordVisibility() {
+            const password = document.getElementById('password');
+            const conPassword = document.getElementById('con_password');
+            const button = document.querySelector('.show-password');
+            if (password.type === 'password') {
+                password.type = 'text';
+                conPassword.type = 'text';
+                button.innerText = 'Hide Password';
+            } else {
+                password.type = 'password';
+                conPassword.type = 'password';
+                button.innerText = 'Show Password';
+            }
+        }
+
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const conPassword = document.getElementById('con_password').value;
+            if (conPassword.length > 0) {
+                if (password !== conPassword) {
+                    alert("Confirm Password doesn't match");
+                }
+            }
+        }
+
+        window.addEventListener('keyup', event => {
+            const capsWarning = document.getElementById('capsWarning');
+            if (event.getModifierState('CapsLock')) {
+                capsWarning.innerText = 'Warning! Caps Lock is On!';
+            } else {
+                capsWarning.innerText = '';
+            }
+        });
+
+        function validateFields() {
+            checkWhitespace();
+            validatePassword();
+        }
+
+        function checkWhitespace() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            const whiteWarning = document.getElementById('whitespace'); 
+            var pattern = /\s/;
+            var hasUsernameSpace = pattern.test(username);
+            var hasPasswordSpace = pattern.test(password);
+
+            if (hasUsernameSpace || hasPasswordSpace) {
+                whiteWarning.innerText = "White Space isn't allowed!";
+            } else {
+                whiteWarning.innerText = "";
+            }
+        }
+
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+            const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.{8,})/;
+
+            if (!pattern.test(password)) {
+                passwordError.innerText = "Password must be at least 8 characters long, contain at least 1 lowercase letter, 1 uppercase letter, and 1 numerical character.";
+            } else {
+                passwordError.innerText = "";
+            }
+        }
+    </script>
+</body>
+</html>
